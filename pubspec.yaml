@@ -1,4 +1,4 @@
-name: food_sense
+name: FoodSense
 description: A food tiering app with eSense compatibility.
 
 # The following line prevents the package from being accidentally published to
