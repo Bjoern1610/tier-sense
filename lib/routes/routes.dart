@@ -1,5 +1,5 @@
-import 'package:FoodSense/view/screens/login/login.dart';
-import 'package:FoodSense/view/screens/tier/tier.dart';
+import 'package:FoodSense/screens/login/login.dart';
+import 'package:FoodSense/screens/tier/tier.dart';
 import 'package:flutter/cupertino.dart';
 
 class Routes {
