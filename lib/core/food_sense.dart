@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_sense/routes/routes.dart';
-import 'package:food_sense/screens/login/login.dart';
+import 'package:food_sense/route/routes.dart';
+import 'package:food_sense/screen/login/login.dart';
 
 class FoodSense extends StatelessWidget {
 
