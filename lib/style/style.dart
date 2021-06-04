@@ -10,11 +10,6 @@ const LABEL_STYLE = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-const HINT_STYLE = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
-);
-
 const BUTTON_STYLE = TextStyle(
   color: Color(0xFF425a7a),
   fontFamily: 'OpenSans',
