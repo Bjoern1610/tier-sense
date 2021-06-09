@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:esense_flutter/esense.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_sense/screen/tier/tier.dart';
-import 'package:food_sense/style/style.dart';
+import 'package:food_sense/screen/styles.dart';
+
+import '../colors.dart';
 
 class Login extends StatefulWidget {
+
+  static ESenseManager ESENSE_MANAGER = ESenseManager();
 
   Login({Key key}): super(key: key);
 
@@ -16,19 +21,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  static const Color _BACKGROUND_COLOR = Color(0xFF425a7a);
   static const String _ESENSE_NAME = 'esense-left';
   static const String _CONNECT = 'CONNECT TO ESENSE';
-  static const String _CONTINUE = 'PRESS TO CONTINUE';
-  static const String _CONNECTING = 'CONNECTING..';
-  static const String _CONNECTION_FAILED = 'CONNECTION FAILED';
+  static const String _CALIBRATE = 'PRESS TO CALIBRATE';
 
   /* eSense connection events */
-  static const String _CONNECTED = 'CONNECTED';
-  static const String _DISCONNECTED = 'DISCONNECTED';
-  static const String _DEVICE_FOUND = 'DEVICE FOUND';
-  static const String _DEVICE_NOT_FOUND = 'DEVICE NOT FOUND';
-  static const String _UNKNOWN = 'UNKNOWN';
+  static const String _CONNECTED = 'Connected';
+  static const String _DEVICE_NOT_FOUND = 'Not Found';
 
   String _buttonStatus;
   String _deviceStatus;
@@ -36,6 +35,39 @@ class _LoginState extends State<Login> {
 
   _LoginState() {
     _buttonStatus = _CONNECT;
+    _deviceStatus = '';
+    _connected = false;
+  }
+
+  /* eSense methods  */
+
+  Future<void> _listenToESense() async {
+    Login.ESENSE_MANAGER.connectionEvents.listen((event) {
+      print('CONNECTION event: $event');
+
+      setState(() {
+        _connected = false;
+        switch (event.type) {
+          case ConnectionType.connected:
+            _deviceStatus = _CONNECTED;
+            _connected = true;
+            break;
+          case ConnectionType.device_not_found:
+            _deviceStatus = _DEVICE_NOT_FOUND;
+            break;
+        }
+      });
+
+      Fluttertoast.showToast(
+        msg: 'eSense Device: ' + _deviceStatus,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    });
+  }
+
+  Future<void> _connectToESense() async {
+    await Login.ESENSE_MANAGER.connect(_ESENSE_NAME);
   }
 
   Widget _buildBackgroundColor() {
@@ -43,7 +75,7 @@ class _LoginState extends State<Login> {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: _BACKGROUND_COLOR,
+        color: BACKGROUND_MEDIUM_COLOR,
       ),
     );
   }
@@ -59,8 +91,8 @@ class _LoginState extends State<Login> {
             fontSize: 200,
             shadows: [
               Shadow(
-                color: Colors.black,
-                blurRadius: 20,
+                color: BACKGROUND_DARK_COLOR,
+                blurRadius: 15,
               )
             ],
           ),
@@ -89,46 +121,10 @@ class _LoginState extends State<Login> {
         color: Colors.white,
         child: Text(
           _buttonStatus,
-          style: BUTTON_STYLE,
+          style: LOGIN_BUTTON_STYLE,
         ),
       ),
     );
-  }
-
-  /* eSense methods  */
-
-  Future<void> _listenToESense() async {
-    ESenseManager().connectionEvents.listen((event) {
-      setState(() {
-        _connected = false;
-        switch (event.type) {
-          case ConnectionType.connected:
-            _deviceStatus = _CONNECTED;
-            _connected = true;
-            _buttonStatus = _CONTINUE;
-            break;
-          case ConnectionType.disconnected:
-            _deviceStatus = _DISCONNECTED;
-            break;
-          case ConnectionType.device_found:
-            _deviceStatus = _DEVICE_FOUND;
-            break;
-          case ConnectionType.device_not_found:
-            _deviceStatus = _DEVICE_NOT_FOUND;
-            break;
-          case ConnectionType.unknown:
-            _deviceStatus = _UNKNOWN;
-            break;
-        }
-      });
-      print('CONNECTION event: $event');
-    });
-  }
-
-  Future<void> _connectToESense() async {
-    _connected = await ESenseManager().connect(_ESENSE_NAME);
-    setState(() => _deviceStatus = _connected ? _CONNECTING : _CONNECTION_FAILED);
-    print('Connecting.. connected: $_connected');
   }
 
   @override
