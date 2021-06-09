@@ -12,8 +12,14 @@ dependencies:
 
   cupertino_icons: ^1.0.0
 
+  # eSense functionality
   esense_flutter: ^0.3.0
+
+  # Tinder like swipe cards
   swipe_cards: ^0.0.5
+
+  # Toast messages
+  fluttertoast: ^8.0.7
 
 dev_dependencies:
   flutter_test:
