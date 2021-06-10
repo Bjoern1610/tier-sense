@@ -11,7 +11,7 @@ import '../colors.dart';
 
 class Login extends StatefulWidget {
 
-  static ESenseManager ESENSE_MANAGER = ESenseManager();
+  static ESenseManager eSenseManager = ESenseManager();
 
   Login({Key key}): super(key: key);
 
@@ -23,10 +23,13 @@ class _LoginState extends State<Login> {
 
   static const String _ESENSE_NAME = 'esense-left';
   static const String _CONNECT = 'CONNECT TO ESENSE';
-  static const String _CALIBRATE = 'PRESS TO CALIBRATE';
+  static const String _CONTINUE = 'PRESS TO CONTINUE';
 
   /* eSense connection events */
+  static const String _UNKNOWN = 'Unknown';
   static const String _CONNECTED = 'Connected';
+  static const String _DISCONNECTED = 'Disconnected';
+  static const String _DEVICE_FOUND = 'Found';
   static const String _DEVICE_NOT_FOUND = 'Not Found';
 
   String _buttonStatus;
@@ -42,15 +45,25 @@ class _LoginState extends State<Login> {
   /* eSense methods  */
 
   Future<void> _listenToESense() async {
-    Login.ESENSE_MANAGER.connectionEvents.listen((event) {
+    Login.eSenseManager.connectionEvents.listen((event) {
       print('CONNECTION event: $event');
 
       setState(() {
         _connected = false;
         switch (event.type) {
+          case ConnectionType.unknown:
+            _deviceStatus = _UNKNOWN;
+            break;
           case ConnectionType.connected:
             _deviceStatus = _CONNECTED;
+            _buttonStatus = _CONTINUE;
             _connected = true;
+            break;
+          case ConnectionType.disconnected:
+            _deviceStatus = _DISCONNECTED;
+            break;
+          case ConnectionType.device_found:
+            _deviceStatus = _DEVICE_FOUND;
             break;
           case ConnectionType.device_not_found:
             _deviceStatus = _DEVICE_NOT_FOUND;
@@ -67,7 +80,7 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _connectToESense() async {
-    await Login.ESENSE_MANAGER.connect(_ESENSE_NAME);
+    await Login.eSenseManager.connect(_ESENSE_NAME);
   }
 
   Widget _buildBackgroundColor() {
@@ -105,7 +118,7 @@ class _LoginState extends State<Login> {
     return Container(
       padding: EdgeInsets.only(top: 15, bottom: 15),
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           if (_connected) {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Tier()));
@@ -113,12 +126,14 @@ class _LoginState extends State<Login> {
             _connectToESense();
           }
         },
-        elevation: 5,
-        padding: EdgeInsets.all(15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+        style: ElevatedButton.styleFrom(
+          elevation: 5,
+          padding: EdgeInsets.all(15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          primary: Colors.white,
         ),
-        color: Colors.white,
         child: Text(
           _buttonStatus,
           style: LOGIN_BUTTON_STYLE,
