@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_sense/model/food/food.dart';
+import 'package:food_sense/model/food/rating.dart';
 import 'package:food_sense/screen/login/login.dart';
 
 import 'package:swipe_cards/swipe_cards.dart';
@@ -20,47 +22,76 @@ class Tier extends StatefulWidget {
 
 class _TierState extends State<Tier> {
 
-  static const int _MAX_SAMPLES = 2;
+  static const int _EARABLE_ROTATION = -90;
+  static const int _Y_ERROR_SMOOTHING = 100;
+  static const int _Z_ERROR_SMOOTHING = 150;
+  static const int _MAX_SAMPLES = 20;
+  static const int _SWIPE_THRESHOLD = 600;
 
   List<SwipeItem> _items;
   MatchEngine _matchEngine;
+  Rating _rating;
 
   StreamSubscription _streamSubscription;
+  bool _wait;
   int _sampleCounter;
+  int _x;
+  int _y;
+  int _z;
   List<int> _xSamples;
   List<int> _ySamples;
   List<int> _zSamples;
 
   _TierState() {
     _items = [];
+    _rating = new Rating();
+    _wait = false;
     _sampleCounter = 0;
+    _x = 0;
+    _y = 0;
+    _z = 0;
     _xSamples = [];
     _ySamples = [];
     _zSamples = [];
+
+    Login.eSenseManager.setSamplingRate(_MAX_SAMPLES);
   }
 
   Future<void> _startListenToSensorEvents() async {
-    Login.ESENSE_MANAGER.setSamplingRate(2);
-    _streamSubscription = Login.ESENSE_MANAGER.sensorEvents.listen((event) {
+    _streamSubscription = Login.eSenseManager.sensorEvents.listen((event) {
       setState(() {
         _sampleCounter++;
 
-        // Current gyro values
+        // Waiting for user to finish swipe gesture
+        if (_wait) {
+          if (_sampleCounter != 2 * _MAX_SAMPLES) {
+            print('WAITING..');
+            return;
+          } else {
+            _sampleCounter = 1;
+            _wait = false;
+          }
+        }
+
+        // Current gyro values with x, y and z
         List<int> gyroValues = event.gyro;
 
-        // The earable is located in the ear rotated by 90 degrees clockwise
-        int x = gyroValues[0];
-        int y = gyroValues[1];
-        int z = gyroValues[2];
+        // Smoothing the y and z values
+        gyroValues[1] -= _Y_ERROR_SMOOTHING;
+        gyroValues[2] += _Z_ERROR_SMOOTHING;
 
-        print('$x | $y | $z\n----------');
+        // Rotate vector due to approx. 90 counterclockwise rotation while wearing the earable
+        gyroValues = _rotateVector(gyroValues, _EARABLE_ROTATION);
+        _x = gyroValues[0];
+        _y = gyroValues[1];
+        _z = gyroValues[2];
 
         if (_sampleCounter != _MAX_SAMPLES) {
-          _xSamples.add(x);
-          _ySamples.add(y);
-          _zSamples.add(z);
+          _xSamples.add(_x);
+          _ySamples.add(_y);
+          _zSamples.add(_z);
         } else {
-          // Average value to reduce measuring mistakes
+          // Take the average value to reduce measuring mistakes
           int averagedX = (_xSamples.fold(0, (previous, current) => previous + current) / _xSamples.length).floor();
           int averagedY = (_ySamples.fold(0, (previous, current) => previous + current) / _ySamples.length).floor();
           int averagedZ = (_zSamples.fold(0, (previous, current) => previous + current) / _zSamples.length).floor();
@@ -70,14 +101,10 @@ class _TierState extends State<Tier> {
           _handleGesture(averagedX, averagedY, averagedZ);
 
           // Reset values
-          _sampleCounter = 1;
+          _sampleCounter = 0;
           _xSamples.clear();
           _ySamples.clear();
           _zSamples.clear();
-
-          _xSamples.add(x);
-          _ySamples.add(y);
-          _zSamples.add(z);
         }
       });
     });
@@ -87,7 +114,54 @@ class _TierState extends State<Tier> {
     _streamSubscription.cancel();
   }
 
+  List<int> _rotateVector(List<int> vector, int degree) {
+    List<int> rotatedVector = [0, 0, 0];
+    List<List<double>> rotationMatrix = [
+      // First row vector
+      [cos(degree), -sin(degree), 0.0],
+      // Second row vector
+      [sin(degree), cos(degree), 0.0],
+      // Third row vector
+      [0.0, 0.0, 1.0]
+    ];
+
+    // Rotate vector defined by rotation matrix
+    for(int i = 0; i < rotationMatrix.length; i++) {
+      for(int j = 0; j < rotatedVector.length; j++) {
+        // Integer values are sufficient thus flooring is okay
+        rotatedVector[i] +=  (rotationMatrix[i][j] * vector[j]).floor();
+      }
+    }
+
+    return rotatedVector;
+  }
+
   _handleGesture(int x, int y, int z) {
+    SwipeItem item = _matchEngine.currentItem;
+    // Do not swipe when stack is empty
+    if (item != null) {
+      // Swipe left
+      if (y > _SWIPE_THRESHOLD) {
+        _wait = true;
+        _rating.addNope(item.content.child.data);
+        item.nope();
+        return;
+      }
+      // Swipe up
+      if (z < -_SWIPE_THRESHOLD) {
+        _wait = true;
+        _rating.addSuper(item.content.child.data);
+        item.superLike();
+        return;
+      }
+      // Swipe right
+      if (y < -_SWIPE_THRESHOLD) {
+        _wait = true;
+        _rating.addLike(item.content.child.data);
+        item.like();
+        return;
+      }
+    }
   }
 
   @override
@@ -96,7 +170,13 @@ class _TierState extends State<Tier> {
     for(int i = 0; i < FRUITS.length; i++) {
       _items.add(SwipeItem(
         content: Container(
-          color: FRUITS[i],
+          child: Text(
+            FRUITS[i],
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: ITEM_SWIPE_CARD_TEXT_STYLE,
+          ),
+          color: BACKGROUND_BRIGHT_COLOR,
         ),
         nopeAction: () => print('NOPE'),
         superlikeAction: () => print('SUPER'),
@@ -105,7 +185,7 @@ class _TierState extends State<Tier> {
     }
     _matchEngine = MatchEngine(swipeItems: _items);
 
-    // We can assume that the eSense connection has successfully been made
+    // The eSense connection has successfully been made
     _startListenToSensorEvents();
   }
 
@@ -124,6 +204,9 @@ class _TierState extends State<Tier> {
                 matchEngine: _matchEngine,
                 itemBuilder: (context, index) {
                   return Container(
+                    alignment: Alignment.center,
+                    child: _items[index].content.child,
+                    padding: EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
                       color: _items[index].content.color,
                       borderRadius: BorderRadius.circular(15),
@@ -150,53 +233,65 @@ class _TierState extends State<Tier> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                RaisedButton(
+                // NOPE BUTTON
+                ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
+                        _rating.addNope(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.nope();
                       }
                     },
-                    elevation: 10,
-                    padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      primary: Colors.white,
                     ),
-                    color: Colors.white,
                     child: Text(
                       "NOPE",
-                      style: NOPE_BUTTON_STYLE,
+                      style: NOPE_BUTTON_TEXT_STYLE,
                     )),
-                RaisedButton(
+                // SUPER BUTTON
+                ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
+                        _rating.addSuper(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.superLike();
                       }
                     },
-                    elevation: 10,
-                    padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      primary: Colors.white,
                     ),
-                    color: Colors.white,
                     child: Text(
                       "SUPER",
-                      style: SUPER_BUTTON_STYLE,
+                      style: SUPER_BUTTON_TEXT_STYLE,
                     )),
-                RaisedButton(
+                // LIKE BUTTON
+                ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
+                        _rating.addLike(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.like();
                       }
                     },
-                    elevation: 10,
-                    padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      primary: Colors.white,
                     ),
-                    color: Colors.white,
                     child: Text(
                       "LIKE",
-                      style: LIKE_BUTTON_STYLE,
+                      style: LIKE_BUTTON_TEXT_STYLE,
                     ))
               ],
             ),
