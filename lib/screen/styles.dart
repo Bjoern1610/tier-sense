@@ -7,7 +7,7 @@ import 'colors.dart';
 
 /* Text styles */
 
-const LOGIN_BUTTON_STYLE = TextStyle(
+const LOGIN_BUTTON_TEXT_STYLE = TextStyle(
   color: BACKGROUND_MEDIUM_COLOR,
   fontFamily: 'OpenSans',
   fontSize: 18,
@@ -40,9 +40,33 @@ const LIKE_BUTTON_TEXT_STYLE = TextStyle(
 );
 
 const ITEM_SWIPE_CARD_TEXT_STYLE = TextStyle(
-  color: BACKGROUND_MEDIUM_COLOR,
+  color: BACKGROUND_DARK_COLOR,
   fontFamily: 'OpenSans',
   fontSize: 42,
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.5,
+);
+
+const OVERVIEW_HEADLINE_TEXT_STYLE = TextStyle(
+  color: BACKGROUND_DARK_COLOR,
+  fontFamily: 'OpenSans',
+  fontSize: 21,
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.5,
+);
+
+const OVERVIEW_TAB_TEXT_STYLE = TextStyle(
+  color: BACKGROUND_DARK_COLOR,
+  fontFamily: 'OpenSans',
+  fontSize: 14,
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.5,
+);
+
+const OVERVIEW_ITEM_TEXT_STYLE = TextStyle(
+  color: BACKGROUND_DARK_COLOR,
+  fontFamily: 'OpenSans',
+  fontSize: 18,
   fontWeight: FontWeight.bold,
   letterSpacing: 1.5,
 );
