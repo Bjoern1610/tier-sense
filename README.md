@@ -1,4 +1,4 @@
-# Food Sense
+# Tier Sense
 
 A Flutter based tiering app with eSense compatibility.
 
