@@ -1,5 +1,5 @@
-name: food_sense
-description: A food tiering app with eSense compatibility.
+name: tier_sense
+description: A tiering app with eSense compatibility.
 
 version: 1.0.0+1
 

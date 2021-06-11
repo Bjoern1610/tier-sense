@@ -4,8 +4,8 @@ import 'package:esense_flutter/esense.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_sense/screen/tier/tier.dart';
-import 'package:food_sense/screen/styles.dart';
+import 'package:tier_sense/screen/tier/tier.dart';
+import 'package:tier_sense/screen/styles.dart';
 
 import '../colors.dart';
 

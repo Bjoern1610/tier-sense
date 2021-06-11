@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:food_sense/screen/routes.dart';
-import 'package:food_sense/screen/colors.dart';
-import 'package:food_sense/screen/tier/tier.dart';
+import 'package:tier_sense/screen/routes.dart';
+import 'package:tier_sense/screen/colors.dart';
+import 'package:tier_sense/screen/tier/tier.dart';
 
 import '../styles.dart';
 

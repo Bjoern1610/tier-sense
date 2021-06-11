@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_sense/model/food/food.dart';
-import 'package:food_sense/model/rating.dart';
-import 'package:food_sense/screen/login/login.dart';
+import 'package:tier_sense/model/food/food.dart';
+import 'package:tier_sense/model/rating.dart';
+import 'package:tier_sense/screen/login/login.dart';
 
 import 'package:swipe_cards/swipe_cards.dart';
 

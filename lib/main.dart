@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'core/food_sense.dart';
+import 'core/tier_sense.dart';
 
 void main() {
-  runApp(FoodSense());
+  runApp(TierSense());
 }
