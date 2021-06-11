@@ -136,7 +136,7 @@ class _LoginState extends State<Login> {
         ),
         child: Text(
           _buttonStatus,
-          style: LOGIN_BUTTON_STYLE,
+          style: LOGIN_BUTTON_TEXT_STYLE,
         ),
       ),
     );
