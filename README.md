@@ -1,6 +1,6 @@
 # Food Sense
 
-A Flutter based food tiering app with eSense compatibility.
+A Flutter based tiering app with eSense compatibility.
 
 ## Getting Started
 
