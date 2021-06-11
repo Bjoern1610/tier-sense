@@ -117,11 +117,11 @@ class _LoginState extends State<Login> {
                   ),
                   // Headline
                   Text(
-                    'F',
+                    'TierSense',
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'HelloStockholm',
-                      fontSize: 200,
+                      fontSize: 180,
                       shadows: [
                         BoxShadow(
                           color: BACKGROUND_DARK_COLOR,
