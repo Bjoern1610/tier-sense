@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_sense/model/food/food.dart';
-import 'package:food_sense/model/food/rating.dart';
+import 'package:food_sense/model/rating.dart';
 import 'package:food_sense/screen/login/login.dart';
 
 import 'package:swipe_cards/swipe_cards.dart';
@@ -201,112 +201,115 @@ class _TierState extends State<Tier> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: BACKGROUND_MEDIUM_COLOR,
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: SwipeCards(
-                matchEngine: _matchEngine,
-                itemBuilder: (context, index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: _items[index].content.child,
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    decoration: BoxDecoration(
-                      color: _items[index].content.color,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: BACKGROUND_DARK_COLOR.withOpacity(0.4),
-                          offset: Offset(0, 5),
-                          blurRadius: 10,
-                          spreadRadius: 5
-                        ),
-                      ]
-                    ),
-                  );
-                },
-                onStackFinished: () {
-                  print('FINISHED');
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
-                  _pauseListenToSensorEvents();
-                },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: BACKGROUND_MEDIUM_COLOR,
+        body: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: SwipeCards(
+                  matchEngine: _matchEngine,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: _items[index].content.child,
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          color: _items[index].content.color,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: BACKGROUND_DARK_COLOR.withOpacity(0.4),
+                                offset: Offset(0, 5),
+                                blurRadius: 10,
+                                spreadRadius: 5
+                            ),
+                          ]
+                      ),
+                    );
+                  },
+                  onStackFinished: () {
+                    print('FINISHED');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
+                    _pauseListenToSensorEvents();
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // NOPE BUTTON
-                ElevatedButton(
-                    onPressed: () {
-                      if (_matchEngine.currentItem != null) {
-                        Tier.rating.addNope(_matchEngine.currentItem.content.child.data);
-                        _matchEngine.currentItem.nope();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // NOPE BUTTON
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_matchEngine.currentItem != null) {
+                          Tier.rating.addNope(_matchEngine.currentItem.content.child.data);
+                          _matchEngine.currentItem.nope();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        primary: Colors.white,
                       ),
-                      primary: Colors.white,
-                    ),
-                    child: Text(
-                      "NOPE",
-                      style: NOPE_BUTTON_TEXT_STYLE,
-                    )),
-                // SUPER BUTTON
-                ElevatedButton(
-                    onPressed: () {
-                      if (_matchEngine.currentItem != null) {
-                        Tier.rating.addSuper(_matchEngine.currentItem.content.child.data);
-                        _matchEngine.currentItem.superLike();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                      child: Text(
+                        "NOPE",
+                        style: NOPE_BUTTON_TEXT_STYLE,
+                      )),
+                  // SUPER BUTTON
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_matchEngine.currentItem != null) {
+                          Tier.rating.addSuper(_matchEngine.currentItem.content.child.data);
+                          _matchEngine.currentItem.superLike();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        primary: Colors.white,
                       ),
-                      primary: Colors.white,
-                    ),
-                    child: Text(
-                      "SUPER",
-                      style: SUPER_BUTTON_TEXT_STYLE,
-                    )),
-                // LIKE BUTTON
-                ElevatedButton(
-                    onPressed: () {
-                      if (_matchEngine.currentItem != null) {
-                        Tier.rating.addLike(_matchEngine.currentItem.content.child.data);
-                        _matchEngine.currentItem.like();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                      child: Text(
+                        "SUPER",
+                        style: SUPER_BUTTON_TEXT_STYLE,
+                      )),
+                  // LIKE BUTTON
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_matchEngine.currentItem != null) {
+                          Tier.rating.addLike(_matchEngine.currentItem.content.child.data);
+                          _matchEngine.currentItem.like();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        primary: Colors.white,
                       ),
-                      primary: Colors.white,
-                    ),
-                    child: Text(
-                      "LIKE",
-                      style: LIKE_BUTTON_TEXT_STYLE,
-                    ))
-              ],
-            ),
-          ],
+                      child: Text(
+                        "LIKE",
+                        style: LIKE_BUTTON_TEXT_STYLE,
+                      ))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

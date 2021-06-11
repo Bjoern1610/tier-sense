@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:food_sense/screen/routes.dart';
 import 'package:food_sense/screen/colors.dart';
 import 'package:food_sense/screen/tier/tier.dart';
 
@@ -61,87 +62,90 @@ class _OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: BACKGROUND_MEDIUM_COLOR,
-        appBar: AppBar(
-          title: Text(
-            'Overview',
-            style: OVERVIEW_HEADLINE_TEXT_STYLE
-          ),
-          automaticallyImplyLeading: false,
-          elevation: 10,
-          centerTitle: true,
-          backgroundColor: BACKGROUND_BRIGHT_COLOR,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          backgroundColor: BACKGROUND_MEDIUM_COLOR,
+          appBar: AppBar(
+            title: Text(
+                'Overview',
+                style: OVERVIEW_HEADLINE_TEXT_STYLE
+            ),
+            automaticallyImplyLeading: false,
+            elevation: 10,
+            centerTitle: true,
+            backgroundColor: BACKGROUND_BRIGHT_COLOR,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(30.0),
+              ),
+            ),
+            bottom: TabBar(
+              isScrollable: true,
+              indicatorColor: BACKGROUND_MEDIUM_COLOR,
+              indicatorWeight: 4,
+              tabs: [
+                Tab(
+                  child: Text(
+                    'Superliked',
+                    style: OVERVIEW_TAB_TEXT_STYLE,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    'Liked',
+                    style: OVERVIEW_TAB_TEXT_STYLE,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    'Disliked',
+                    style: OVERVIEW_TAB_TEXT_STYLE,
+                  ),
+                ),
+              ],
             ),
           ),
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: BACKGROUND_MEDIUM_COLOR,
-            indicatorWeight: 4,
-            tabs: [
-              Tab(
-                child: Text(
-                  'Superliked',
-                  style: OVERVIEW_TAB_TEXT_STYLE,
-                ),
+          body: TabBarView(
+            children: [
+              ListView.builder(
+                padding: EdgeInsets.all(20),
+                itemCount: _superliked.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 10,
+                    shape: _superliked[index].shape,
+                    child: _superliked[index],
+                  );
+                },
               ),
-              Tab(
-                child: Text(
-                  'Liked',
-                  style: OVERVIEW_TAB_TEXT_STYLE,
-                ),
+              ListView.builder(
+                padding: EdgeInsets.all(20),
+                itemCount: _liked.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 10,
+                    shape: _liked[index].shape,
+                    child: _liked[index],
+                  );
+                },
               ),
-              Tab(
-                child: Text(
-                  'Disliked',
-                  style: OVERVIEW_TAB_TEXT_STYLE,
-                ),
+              ListView.builder(
+                padding: EdgeInsets.all(20),
+                itemCount: _disliked.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 10,
+                    shape: _disliked[index].shape,
+                    child: _disliked[index],
+                  );
+                },
               ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            ListView.builder(
-              padding: EdgeInsets.all(20),
-              itemCount: _superliked.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 10,
-                  shape: _superliked[index].shape,
-                  child: _superliked[index],
-                );
-              },
-            ),
-            ListView.builder(
-              padding: EdgeInsets.all(20),
-              itemCount: _liked.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 10,
-                  shape: _liked[index].shape,
-                  child: _liked[index],
-                );
-              },
-            ),
-            ListView.builder(
-              padding: EdgeInsets.all(20),
-              itemCount: _disliked.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 10,
-                  shape: _disliked[index].shape,
-                  child: _disliked[index],
-                );
-              },
-            ),
-          ],
         ),
       ),
     );
