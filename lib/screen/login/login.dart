@@ -83,65 +83,6 @@ class _LoginState extends State<Login> {
     await Login.eSenseManager.connect(_ESENSE_NAME);
   }
 
-  Widget _buildBackgroundColor() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        color: BACKGROUND_MEDIUM_COLOR,
-      ),
-    );
-  }
-
-  Widget _buildHeadline() {
-    return Stack(
-      children: [
-        Text(
-          'F',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'HelloStockholm',
-            fontSize: 200,
-            shadows: [
-              Shadow(
-                color: BACKGROUND_DARK_COLOR,
-                blurRadius: 15,
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildConnectButton() {
-    return Container(
-      padding: EdgeInsets.only(top: 15, bottom: 15),
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (_connected) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Tier()));
-          } else {
-            _connectToESense();
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          elevation: 5,
-          padding: EdgeInsets.all(15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          primary: Colors.white,
-        ),
-        child: Text(
-          _buttonStatus,
-          style: LOGIN_BUTTON_TEXT_STYLE,
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -153,7 +94,14 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Stack(
         children: [
-          _buildBackgroundColor(),
+          // Background
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: BACKGROUND_MEDIUM_COLOR,
+            ),
+          ),
           Container(
             height: double.infinity,
             child: SingleChildScrollView(
@@ -168,8 +116,47 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 80,
                   ),
-                  _buildHeadline(),
-                  _buildConnectButton(),
+                  // Headline
+                  Text(
+                    'F',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'HelloStockholm',
+                      fontSize: 200,
+                      shadows: [
+                        BoxShadow(
+                          color: BACKGROUND_DARK_COLOR,
+                          blurRadius: 15,
+                        )
+                      ],
+                    ),
+                  ),
+                  // Connect button
+                  Container(
+                    padding: EdgeInsets.only(top: 15, bottom: 15),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_connected) {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Tier()));
+                        } else {
+                          _connectToESense();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 5,
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        primary: Colors.white,
+                      ),
+                      child: Text(
+                        _buttonStatus,
+                        style: LOGIN_BUTTON_TEXT_STYLE,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
