@@ -11,8 +11,11 @@ import 'package:swipe_cards/swipe_cards.dart';
 
 import '../colors.dart';
 import '../styles.dart';
+import 'overview.dart';
 
 class Tier extends StatefulWidget {
+
+  static Rating rating = new Rating();
 
   Tier({Key key}): super(key: key);
 
@@ -30,7 +33,6 @@ class _TierState extends State<Tier> {
 
   List<SwipeItem> _items;
   MatchEngine _matchEngine;
-  Rating _rating;
 
   StreamSubscription _streamSubscription;
   bool _wait;
@@ -44,7 +46,6 @@ class _TierState extends State<Tier> {
 
   _TierState() {
     _items = [];
-    _rating = new Rating();
     _wait = false;
     _sampleCounter = 0;
     _x = 0;
@@ -143,21 +144,21 @@ class _TierState extends State<Tier> {
       // Swipe left
       if (y > _SWIPE_THRESHOLD) {
         _wait = true;
-        _rating.addNope(item.content.child.data);
+        Tier.rating.addNope(item.content.child.data);
         item.nope();
         return;
       }
       // Swipe up
       if (z < -_SWIPE_THRESHOLD) {
         _wait = true;
-        _rating.addSuper(item.content.child.data);
+        Tier.rating.addSuper(item.content.child.data);
         item.superLike();
         return;
       }
       // Swipe right
       if (y < -_SWIPE_THRESHOLD) {
         _wait = true;
-        _rating.addLike(item.content.child.data);
+        Tier.rating.addLike(item.content.child.data);
         item.like();
         return;
       }
@@ -178,9 +179,18 @@ class _TierState extends State<Tier> {
           ),
           color: BACKGROUND_BRIGHT_COLOR,
         ),
-        nopeAction: () => print('NOPE'),
-        superlikeAction: () => print('SUPER'),
-        likeAction: () => print('LIKE'),
+        nopeAction: () {
+          print('NOPE');
+          Tier.rating.addNope(_matchEngine.currentItem.content.child.data);
+        },
+        superlikeAction: () {
+          print('SUPER');
+          Tier.rating.addSuper(_matchEngine.currentItem.content.child.data);
+        },
+        likeAction: () {
+          print('LIKE');
+          Tier.rating.addLike(_matchEngine.currentItem.content.child.data);
+        },
       ));
     }
     _matchEngine = MatchEngine(swipeItems: _items);
@@ -223,6 +233,7 @@ class _TierState extends State<Tier> {
                 },
                 onStackFinished: () {
                   print('FINISHED');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
                   _pauseListenToSensorEvents();
                 },
               ),
@@ -237,7 +248,7 @@ class _TierState extends State<Tier> {
                 ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
-                        _rating.addNope(_matchEngine.currentItem.content.child.data);
+                        Tier.rating.addNope(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.nope();
                       }
                     },
@@ -257,7 +268,7 @@ class _TierState extends State<Tier> {
                 ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
-                        _rating.addSuper(_matchEngine.currentItem.content.child.data);
+                        Tier.rating.addSuper(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.superLike();
                       }
                     },
@@ -277,7 +288,7 @@ class _TierState extends State<Tier> {
                 ElevatedButton(
                     onPressed: () {
                       if (_matchEngine.currentItem != null) {
-                        _rating.addLike(_matchEngine.currentItem.content.child.data);
+                        Tier.rating.addLike(_matchEngine.currentItem.content.child.data);
                         _matchEngine.currentItem.like();
                       }
                     },
