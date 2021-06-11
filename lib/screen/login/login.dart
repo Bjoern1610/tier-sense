@@ -21,6 +21,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+  // The used eSense device name
   static const String _ESENSE_NAME = 'esense-left';
   static const String _CONNECT = 'CONNECT TO ESENSE';
   static const String _CONTINUE = 'PRESS TO CONTINUE';
@@ -41,8 +42,6 @@ class _LoginState extends State<Login> {
     _deviceStatus = '';
     _connected = false;
   }
-
-  /* eSense methods  */
 
   Future<void> _listenToESense() async {
     Login.eSenseManager.connectionEvents.listen((event) {
