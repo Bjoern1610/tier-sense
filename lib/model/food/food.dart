@@ -1,5 +1,3 @@
-import 'package:food_sense/screen/colors.dart';
-
 const FRUITS = [
   'Apple',
   'Apricot',
@@ -7,10 +5,10 @@ const FRUITS = [
   'Blackberry',
   'Blueberry',
   'Cherry',
+  'Clementine',
   'Coconut',
   'Cranberry',
   'Dragonfruit',
-  'Goji berry',
   'Grape',
   'Grapefruit',
   'Huckleberry',
@@ -18,13 +16,10 @@ const FRUITS = [
   'Lemon',
   'Lime',
   'Mango',
+  'Mandarin',
   'Melon',
-  'Watermelon',
   'Nectarine',
   'Orange',
-  'Blood orange',
-  'Clementine',
-  'Mandarin',
   'Papaya',
   'Passionfruit',
   'Peach',
@@ -33,5 +28,6 @@ const FRUITS = [
   'Pineapple',
   'Pomelo',
   'Raspberry',
-  'Strawberry'
+  'Strawberry',
+  'Watermelon',
 ];
