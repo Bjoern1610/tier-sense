@@ -1,4 +1,4 @@
-# Tier Sense
+# TierSense
 
 A Flutter based tiering app with eSense compatibility.
 
