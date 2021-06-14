@@ -69,12 +69,6 @@ class _LoginState extends State<Login> {
             break;
         }
       });
-
-      Fluttertoast.showToast(
-        msg: 'eSense Device: ' + _deviceStatus,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
     });
   }
 
