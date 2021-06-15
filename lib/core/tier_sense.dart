@@ -16,6 +16,7 @@ class TierSense extends StatelessWidget {
         TIER: (context) => Tier(),
         OVERVIEW: (context) => Overview()
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
