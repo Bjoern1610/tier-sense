@@ -115,6 +115,10 @@ class _TierState extends State<Tier> {
     _streamSubscription.cancel();
   }
 
+  Future<void> _disconnectFromESense() async {
+    Login.eSenseManager.disconnect();
+  }
+
   List<int> _rotateVector(List<int> vector, int degree) {
     List<int> rotatedVector = [0, 0, 0];
     List<List<double>> rotationMatrix = [
@@ -237,6 +241,7 @@ class _TierState extends State<Tier> {
                     print('FINISHED');
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
                     _pauseListenToSensorEvents();
+                    _disconnectFromESense();
                   },
                 ),
               ),
@@ -246,7 +251,7 @@ class _TierState extends State<Tier> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // NOPE BUTTON
+                  // Nope button
                   ElevatedButton(
                       onPressed: () {
                         if (_matchEngine.currentItem != null) {
@@ -266,7 +271,7 @@ class _TierState extends State<Tier> {
                         "NOPE",
                         style: NOPE_BUTTON_TEXT_STYLE,
                       )),
-                  // SUPER BUTTON
+                  // Super button
                   ElevatedButton(
                       onPressed: () {
                         if (_matchEngine.currentItem != null) {
@@ -286,7 +291,7 @@ class _TierState extends State<Tier> {
                         "SUPER",
                         style: SUPER_BUTTON_TEXT_STYLE,
                       )),
-                  // LIKE BUTTON
+                  // Like button
                   ElevatedButton(
                       onPressed: () {
                         if (_matchEngine.currentItem != null) {
@@ -305,7 +310,8 @@ class _TierState extends State<Tier> {
                       child: Text(
                         "LIKE",
                         style: LIKE_BUTTON_TEXT_STYLE,
-                      ))
+                      )
+                  )
                 ],
               ),
             ],
