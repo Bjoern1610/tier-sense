@@ -23,6 +23,7 @@ class _LoginState extends State<Login> {
 
   // The used eSense device name
   static const String _ESENSE_NAME = 'esense-left';
+
   static const String _CONNECT = 'CONNECT TO ESENSE';
   static const String _CONTINUE = 'PRESS TO CONTINUE';
 
