@@ -3,24 +3,21 @@ import 'dart:async';
 import 'package:esense_flutter/esense.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:tier_sense/screen/tier/tier.dart';
 import 'package:tier_sense/screen/styles.dart';
+import 'package:tier_sense/screen/tier/tier.dart';
 
 import '../colors.dart';
 
 class Login extends StatefulWidget {
-
   static ESenseManager eSenseManager = ESenseManager();
 
-  Login({Key key}): super(key: key);
+  Login({Key key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-
   // The used eSense device name
   static const String _ESENSE_NAME = 'esense-left';
 

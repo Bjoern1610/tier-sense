@@ -1,22 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tier_sense/screen/routes.dart';
 import 'package:tier_sense/screen/colors.dart';
 import 'package:tier_sense/screen/tier/tier.dart';
 
 import '../styles.dart';
 
 class Overview extends StatefulWidget {
-
-  Overview({Key key}): super(key: key);
+  Overview({Key key}) : super(key: key);
 
   @override
   _OverviewState createState() => _OverviewState();
 }
 
 class _OverviewState extends State<Overview> {
-
   List<ListTile> _superliked;
   List<ListTile> _liked;
   List<ListTile> _disliked;
@@ -44,17 +41,17 @@ class _OverviewState extends State<Overview> {
   void initState() {
     super.initState();
     // Get superliked content
-    for(int i = 0; i < Tier.rating.supers.length; i++) {
+    for (int i = 0; i < Tier.rating.supers.length; i++) {
       ListTile listTile = _createListTile(Tier.rating.supers[i]);
       _superliked.add(listTile);
     }
     // Get liked content
-    for(int i = 0; i < Tier.rating.likes.length; i++) {
+    for (int i = 0; i < Tier.rating.likes.length; i++) {
       ListTile listTile = _createListTile(Tier.rating.likes[i]);
       _liked.add(listTile);
     }
     // Get disliked content
-    for(int i = 0; i < Tier.rating.nopes.length; i++) {
+    for (int i = 0; i < Tier.rating.nopes.length; i++) {
       ListTile listTile = _createListTile(Tier.rating.nopes[i]);
       _disliked.add(listTile);
     }
@@ -69,10 +66,7 @@ class _OverviewState extends State<Overview> {
         child: Scaffold(
           backgroundColor: BACKGROUND_MEDIUM_COLOR,
           appBar: AppBar(
-            title: Text(
-                'Overview',
-                style: OVERVIEW_HEADLINE_TEXT_STYLE
-            ),
+            title: Text('Overview', style: OVERVIEW_HEADLINE_TEXT_STYLE),
             automaticallyImplyLeading: false,
             elevation: 10,
             centerTitle: true,

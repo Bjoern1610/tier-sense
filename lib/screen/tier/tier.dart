@@ -3,28 +3,25 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:swipe_cards/swipe_cards.dart';
 import 'package:tier_sense/model/food/food.dart';
 import 'package:tier_sense/model/rating.dart';
 import 'package:tier_sense/screen/login/login.dart';
-
-import 'package:swipe_cards/swipe_cards.dart';
 
 import '../colors.dart';
 import '../styles.dart';
 import 'overview.dart';
 
 class Tier extends StatefulWidget {
-
   static Rating rating = new Rating();
 
-  Tier({Key key}): super(key: key);
+  Tier({Key key}) : super(key: key);
 
   @override
   _TierState createState() => _TierState();
 }
 
 class _TierState extends State<Tier> {
-
   static const int _EARABLE_ROTATION = -90;
   static const int _Y_ERROR_SMOOTHING = 100;
   static const int _Z_ERROR_SMOOTHING = 150;
@@ -131,10 +128,10 @@ class _TierState extends State<Tier> {
     ];
 
     // Rotate vector defined by rotation matrix
-    for(int i = 0; i < rotationMatrix.length; i++) {
-      for(int j = 0; j < rotatedVector.length; j++) {
+    for (int i = 0; i < rotationMatrix.length; i++) {
+      for (int j = 0; j < rotatedVector.length; j++) {
         // Integer values are sufficient thus flooring is okay
-        rotatedVector[i] +=  (rotationMatrix[i][j] * vector[j]).floor();
+        rotatedVector[i] += (rotationMatrix[i][j] * vector[j]).floor();
       }
     }
 
@@ -172,7 +169,7 @@ class _TierState extends State<Tier> {
   @override
   void initState() {
     super.initState();
-    for(int i = 0; i < FRUITS.length; i++) {
+    for (int i = 0; i < FRUITS.length; i++) {
       _items.add(SwipeItem(
         content: Container(
           child: Text(
@@ -231,10 +228,8 @@ class _TierState extends State<Tier> {
                                 color: BACKGROUND_DARK_COLOR.withOpacity(0.4),
                                 offset: Offset(0, 5),
                                 blurRadius: 10,
-                                spreadRadius: 5
-                            ),
-                          ]
-                      ),
+                                spreadRadius: 5),
+                          ]),
                     );
                   },
                   onStackFinished: () {
@@ -310,8 +305,7 @@ class _TierState extends State<Tier> {
                       child: Text(
                         "LIKE",
                         style: LIKE_BUTTON_TEXT_STYLE,
-                      )
-                  )
+                      ))
                 ],
               ),
             ],

@@ -1,5 +1,4 @@
 class Rating {
-
   List<String> _nopes;
   List<String> _supers;
   List<String> _likes;
