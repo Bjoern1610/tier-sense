@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 /* Text styles */
 
 const LOGIN_BUTTON_TEXT_STYLE = TextStyle(
