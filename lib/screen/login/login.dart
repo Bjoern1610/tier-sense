@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:tier_sense/screen/tier/tier.dart';
 import 'package:tier_sense/style/styles.dart';
 
+/// The stateful Login widget.
 class Login extends StatefulWidget {
+  /// The eSense manager which handles all interaction with the eSense device
   static ESenseManager eSenseManager = ESenseManager();
 
+  /// Initializes [key] for subclasses.
   Login({Key key}) : super(key: key);
 
   @override
@@ -16,13 +19,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // The used eSense device name
+  /// The used eSense device name
   static const String _ESENSE_NAME = 'esense-left';
 
   static const String _CONNECT = 'CONNECT TO ESENSE';
   static const String _CONTINUE = 'PRESS TO CONTINUE';
 
-  // eSense connection events
+  /// eSense connection events
   static const String _UNKNOWN = 'Unknown';
   static const String _CONNECTED = 'Connected';
   static const String _DISCONNECTED = 'Disconnected';
@@ -39,6 +42,7 @@ class _LoginState extends State<Login> {
     _connected = false;
   }
 
+  /// Starts listening to eSense connection events.
   Future<void> _listenToESense() async {
     Login.eSenseManager.connectionEvents.listen((event) {
       print('CONNECTION event: $event');
@@ -68,6 +72,7 @@ class _LoginState extends State<Login> {
     });
   }
 
+  /// Connects to the eSense device with name [_ESENSE_NAME].
   Future<void> _connectToESense() async {
     await Login.eSenseManager.connect(_ESENSE_NAME);
   }

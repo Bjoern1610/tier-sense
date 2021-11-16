@@ -6,7 +6,9 @@ import 'package:tier_sense/style/styles.dart';
 
 import '../../style/styles.dart';
 
+/// The stateful Overview widget.
 class Overview extends StatefulWidget {
+  /// Initializes [key] for subclasses.
   Overview({Key key}) : super(key: key);
 
   @override
@@ -24,6 +26,7 @@ class _OverviewState extends State<Overview> {
     _disliked = [];
   }
 
+  /// Creates a swiped item card with a given [text].
   ListTile _createListTile(String text) {
     return ListTile(
       title: Text(

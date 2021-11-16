@@ -11,9 +11,11 @@ import 'package:tier_sense/style/styles.dart';
 
 import 'overview.dart';
 
+/// The stateful Tier widget.
 class Tier extends StatefulWidget {
   static Rating rating = new Rating();
 
+  /// Initializes [key] for subclasses.
   Tier({Key key}) : super(key: key);
 
   @override
@@ -21,15 +23,20 @@ class Tier extends StatefulWidget {
 }
 
 class _TierState extends State<Tier> {
+  /// Rotation of the eSense device in the ear to match the device axis orientation
   static const int _EARABLE_ROTATION = -90;
+  /// Some magic smoothing values to achieve realistic swipe gestures
   static const int _Y_ERROR_SMOOTHING = 100;
   static const int _Z_ERROR_SMOOTHING = 150;
+
+  /// The maximum amount of samples collected
   static const int _MAX_SAMPLES = 20;
+
+  /// Some magic swipe threshold
   static const int _SWIPE_THRESHOLD = 600;
 
   List<SwipeItem> _items;
   MatchEngine _matchEngine;
-
   StreamSubscription _streamSubscription;
   bool _wait;
   int _sampleCounter;
@@ -54,6 +61,7 @@ class _TierState extends State<Tier> {
     Login.eSenseManager.setSamplingRate(_MAX_SAMPLES);
   }
 
+  /// Starts listening to eSense sensor events in a [StreamSubscription].
   Future<void> _startListenToSensorEvents() async {
     _streamSubscription = Login.eSenseManager.sensorEvents.listen((event) {
       setState(() {
@@ -107,14 +115,17 @@ class _TierState extends State<Tier> {
     });
   }
 
+  /// Cancels listening to the eSense sensor events.
   Future<void> _pauseListenToSensorEvents() async {
     _streamSubscription.cancel();
   }
 
+  /// Disconnects the eSense device.
   Future<void> _disconnectFromESense() async {
     Login.eSenseManager.disconnect();
   }
 
+  /// Rotates a given [vector] by [degree] degrees.
   List<int> _rotateVector(List<int> vector, int degree) {
     List<int> rotatedVector = [0, 0, 0];
     List<List<double>> rotationMatrix = [
@@ -137,6 +148,10 @@ class _TierState extends State<Tier> {
     return rotatedVector;
   }
 
+  /// Handles user gesture represented with [x], [y] and [z] coordinates.
+  ///
+  /// Those coordinates were received while the user twisted the head. With specified thresholds, these movement are
+  /// then interpreted as swipe gestures and will be processed further.
   _handleGesture(int x, int y, int z) {
     SwipeItem item = _matchEngine.currentItem;
     // Do not swipe when stack is empty
