@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:esense_flutter/esense.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tier_sense/screen/styles.dart';
 import 'package:tier_sense/screen/tier/tier.dart';
-
-import '../colors.dart';
+import 'package:tier_sense/style/styles.dart';
 
 class Login extends StatefulWidget {
   static ESenseManager eSenseManager = ESenseManager();
@@ -24,7 +22,7 @@ class _LoginState extends State<Login> {
   static const String _CONNECT = 'CONNECT TO ESENSE';
   static const String _CONTINUE = 'PRESS TO CONTINUE';
 
-  /* eSense connection events */
+  // eSense connection events
   static const String _UNKNOWN = 'Unknown';
   static const String _CONNECTED = 'Connected';
   static const String _DISCONNECTED = 'Disconnected';

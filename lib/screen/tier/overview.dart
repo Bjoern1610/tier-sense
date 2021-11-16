@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tier_sense/screen/colors.dart';
 import 'package:tier_sense/screen/tier/tier.dart';
+import 'package:tier_sense/style/styles.dart';
 
-import '../styles.dart';
+import '../../style/styles.dart';
 
 class Overview extends StatefulWidget {
   Overview({Key key}) : super(key: key);

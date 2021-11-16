@@ -7,9 +7,8 @@ import 'package:swipe_cards/swipe_cards.dart';
 import 'package:tier_sense/model/food/food.dart';
 import 'package:tier_sense/model/rating.dart';
 import 'package:tier_sense/screen/login/login.dart';
+import 'package:tier_sense/style/styles.dart';
 
-import '../colors.dart';
-import '../styles.dart';
 import 'overview.dart';
 
 class Tier extends StatefulWidget {
