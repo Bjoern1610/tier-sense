@@ -1,6 +1,14 @@
-# TierSense
+<h1 align="center">
+	TierSense
+</h1>
+<p align="center">
+	A Flutter based tiering app with eSense compatibility.
+</p>
+<h3 align="center">
+	<img height="600" src="https://i.imgur.com/mCNmhRk.png">
+</h3>
 
-A Flutter based tiering app with eSense compatibility. The app was created for the [Mobile Computing and Internet of Things](https://pcs.tm.kit.edu/962_984.php) course at Karlsruhe Institute of Technology.
+The app was created for the [Mobile Computing and Internet of Things](https://pcs.tm.kit.edu/938.php) course at Karlsruhe Institute of Technology.
 
 ## Getting Started
 
